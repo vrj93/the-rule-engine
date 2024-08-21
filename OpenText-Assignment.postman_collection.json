@@ -1,0 +1,182 @@
+{
+	"info": {
+		"_postman_id": "31e3a2d7-eeb8-421e-a358-d312046d1c9e",
+		"name": "OpenText-Assignment",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "15363089"
+	},
+	"item": [
+		{
+			"name": "Login",
+			"protocolProfileBehavior": {
+				"disabledSystemHeaders": {
+					"accept": true
+				}
+			},
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Accept",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"username\": \"vrj022@gmail.com\",\r\n    \"password\": \"WZpMpV7y2fYHUhz\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/login",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"login"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "File Upload",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpYXQiOjE3MjQyNDIwMDEsImV4cCI6MTcyNDI0NTYwMSwicm9sZXMiOlsiUk9MRV9VU0VSIiwiUk9MRV9DT01QQU5ZX0FETUlOIiwiUk9MRV9SRVBPU0lUT1JZX0FETUlOIl0sImVtYWlsIjoidnJqMDIyQGdtYWlsLmNvbSJ9.QB_MYWEbjlZonTmc3sXyIxDZXk1Q1XcxNvea0xTeUoAJEUIPSDFBnZlVLHh7C2CQdJMwVB-Igr2XdgtvXO7ZmCEtXFAdyiAAyVI0d3DTUjVmrXFpBMm84BQLRhKs8G-edvhwJxy2tZzk15Gfo6IonlV8ftSxJRGzAyAMMPQQctf_HbBfdforyMzmr6Jr7imnqhFuHQEw0RA8SQRgmwLvnb3qGAmhceSPJfdOny3r_C5xu4Q7g9p2_YoEewsipa_4qjr4r6gmhShAreJ5HPgYN0RA85b2Dmuv1ydUKSxarR2V-PAZ7nCG0zS9INnMljF1Zttufk7aGiZnmGrq2U4TjJTwVquD_k78cU33VuZ-yfA_lv0Y_CwjvV_SdMeUDgUjO1KuXFvEomaVSRVo6PSziCn1G7u_GNekUco8kKcy1pOBp36Q8ecMuMKWddClpUpJ5zyagQpHAgwsrsrjIVk3zIp57Rj7fiTLTCHn8B5XGeRWPRRRcpNdbj3pYvD5kqMAiLmuOK-jTqDVzZpSiT6Ktb9lmC8Tii_Qp2wMV97jTWb9_nSPnU8SkXcbgapzMGpBc30rDZMKT5F3GZ8tDfOl_Vc0N2zf1nHdn0eW09ClOcVk29ny_RXxahAd8H73mraSDg0owyRR3tSpqKT7RGvqI8etzNSikLGCsuh0jht0gi4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "formdata",
+					"formdata": [
+						{
+							"key": "files[]",
+							"type": "file",
+							"src": [
+								"/C:/Users/vrj93/OneDrive/Desktop/PHP Developer home task v3/composer.lock",
+								"/C:/Users/vrj93/OneDrive/Desktop/PHP Developer home task v3/empty_dependency_file.unknown_format",
+								"/C:/Users/vrj93/OneDrive/Desktop/PHP Developer home task v3/yarn.lock"
+							]
+						},
+						{
+							"key": "repository",
+							"value": "''",
+							"type": "text"
+						},
+						{
+							"key": "commit",
+							"value": "''",
+							"type": "text"
+						}
+					]
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/file-upload",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"file-upload"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "File Scan",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpYXQiOjE3MjQyNDIwMDEsImV4cCI6MTcyNDI0NTYwMSwicm9sZXMiOlsiUk9MRV9VU0VSIiwiUk9MRV9DT01QQU5ZX0FETUlOIiwiUk9MRV9SRVBPU0lUT1JZX0FETUlOIl0sImVtYWlsIjoidnJqMDIyQGdtYWlsLmNvbSJ9.QB_MYWEbjlZonTmc3sXyIxDZXk1Q1XcxNvea0xTeUoAJEUIPSDFBnZlVLHh7C2CQdJMwVB-Igr2XdgtvXO7ZmCEtXFAdyiAAyVI0d3DTUjVmrXFpBMm84BQLRhKs8G-edvhwJxy2tZzk15Gfo6IonlV8ftSxJRGzAyAMMPQQctf_HbBfdforyMzmr6Jr7imnqhFuHQEw0RA8SQRgmwLvnb3qGAmhceSPJfdOny3r_C5xu4Q7g9p2_YoEewsipa_4qjr4r6gmhShAreJ5HPgYN0RA85b2Dmuv1ydUKSxarR2V-PAZ7nCG0zS9INnMljF1Zttufk7aGiZnmGrq2U4TjJTwVquD_k78cU33VuZ-yfA_lv0Y_CwjvV_SdMeUDgUjO1KuXFvEomaVSRVo6PSziCn1G7u_GNekUco8kKcy1pOBp36Q8ecMuMKWddClpUpJ5zyagQpHAgwsrsrjIVk3zIp57Rj7fiTLTCHn8B5XGeRWPRRRcpNdbj3pYvD5kqMAiLmuOK-jTqDVzZpSiT6Ktb9lmC8Tii_Qp2wMV97jTWb9_nSPnU8SkXcbgapzMGpBc30rDZMKT5F3GZ8tDfOl_Vc0N2zf1nHdn0eW09ClOcVk29ny_RXxahAd8H73mraSDg0owyRR3tSpqKT7RGvqI8etzNSikLGCsuh0jht0gi4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"ciUploadId\": 6140679\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "http://localhost:8080/api/v1/file-scan",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"file-scan"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Upload Status",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "eyJ0eXAiOiJKV1QiLCJhbGciOiJSUzUxMiJ9.eyJpYXQiOjE3MjQyNDIwMDEsImV4cCI6MTcyNDI0NTYwMSwicm9sZXMiOlsiUk9MRV9VU0VSIiwiUk9MRV9DT01QQU5ZX0FETUlOIiwiUk9MRV9SRVBPU0lUT1JZX0FETUlOIl0sImVtYWlsIjoidnJqMDIyQGdtYWlsLmNvbSJ9.QB_MYWEbjlZonTmc3sXyIxDZXk1Q1XcxNvea0xTeUoAJEUIPSDFBnZlVLHh7C2CQdJMwVB-Igr2XdgtvXO7ZmCEtXFAdyiAAyVI0d3DTUjVmrXFpBMm84BQLRhKs8G-edvhwJxy2tZzk15Gfo6IonlV8ftSxJRGzAyAMMPQQctf_HbBfdforyMzmr6Jr7imnqhFuHQEw0RA8SQRgmwLvnb3qGAmhceSPJfdOny3r_C5xu4Q7g9p2_YoEewsipa_4qjr4r6gmhShAreJ5HPgYN0RA85b2Dmuv1ydUKSxarR2V-PAZ7nCG0zS9INnMljF1Zttufk7aGiZnmGrq2U4TjJTwVquD_k78cU33VuZ-yfA_lv0Y_CwjvV_SdMeUDgUjO1KuXFvEomaVSRVo6PSziCn1G7u_GNekUco8kKcy1pOBp36Q8ecMuMKWddClpUpJ5zyagQpHAgwsrsrjIVk3zIp57Rj7fiTLTCHn8B5XGeRWPRRRcpNdbj3pYvD5kqMAiLmuOK-jTqDVzZpSiT6Ktb9lmC8Tii_Qp2wMV97jTWb9_nSPnU8SkXcbgapzMGpBc30rDZMKT5F3GZ8tDfOl_Vc0N2zf1nHdn0eW09ClOcVk29ny_RXxahAd8H73mraSDg0owyRR3tSpqKT7RGvqI8etzNSikLGCsuh0jht0gi4",
+							"type": "string"
+						}
+					]
+				},
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:8080/api/v1/upload-status?ciUploadId=6140679",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "8080",
+					"path": [
+						"api",
+						"v1",
+						"upload-status"
+					],
+					"query": [
+						{
+							"key": "ciUploadId",
+							"value": "6140679"
+						}
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
