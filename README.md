@@ -11,8 +11,6 @@ Given APIs are for the purpose of Login(Token generation), File Uploads, File Sc
 - [Usage](#usage)
   - [Notifications](#notifications)
 - [Technology Stack](#technology-stack)
-- [Contributing](#contributing)
-- [License](#license)
 
 ## Installation
 
