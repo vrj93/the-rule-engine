@@ -33,10 +33,12 @@
             <td>Progress</td>
             <td>{{ $data['progress'].' %' }}</td>
         </tr>
-        <tr>
-            <td>Vulnerabilities</td>
-            <td>{{ $data['vulnerabilities'] }}</td>
-        </tr>
+        @isset($data['vulnerabilities'])
+            <tr>
+                <td>Vulnerabilities</td>
+                <td>{{ $data['vulnerabilities'] }}</td>
+            </tr>
+        @endisset
         <tr>
             <td colspan="2" style="text-align: center;"><a href="{{ $data['detailsUrl'] }}" target="_blank"><b>View Detailed Report</b></a></td>
         </tr>
