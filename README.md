@@ -20,8 +20,8 @@ This project is containerized using Docker. To get started, ensure you have Dock
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/yourusername/yourproject.git
-   cd yourproject
+   git clone https://github.com/vrj93/the-rule-engine.git
+   cd the-rule-engine
    ```
 
 2. **Copy the example environment file and modify as needed:**

@@ -42,12 +42,12 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 COPY . /var/www
 
 # Copy existing application directory permissions
-COPY --chown=1000:1000 . /var/www
+COPY --chown=vivek:vivek . /var/www
 
-# Change current user to www
-USER 1000
+# Change current user
+USER vivek
 
-# Expose port 9000 and start php-fpm server
+# Expose port 80 and start php-fpm server
 EXPOSE 80
 
 CMD ["php-fpm"]
