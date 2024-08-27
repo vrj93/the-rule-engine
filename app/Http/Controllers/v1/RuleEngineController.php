@@ -93,29 +93,27 @@ class RuleEngineController extends Controller
             return response()->json(['msg' => $ex->getMessage()], 500);
         }
 
-        $mailData = [];
-        if (null !== $response) {
+        if ($response->successful()) {
             $mailData['progress'] = $response['progress'];
             if ($response['vulnerabilitiesFound'] > $this->rules['vulnerabilities']) {
                 $mailData['vulnerabilities'] = $response['vulnerabilitiesFound'];
                 SlackAlert::message("Warning: {$response['vulnerabilitiesFound']} vulnerabilities found!");
             }
 
-            if ($response->successful()) {
-                $mailData['status'] = true;
-            } else {
-                $mailData['status'] = false;
-            }
             $mailData['detailsUrl'] = $response['detailsUrl'];
+
+            Mail::to('vrj022@gmail.com', 'Vivek Joshi')
+                ->queue(new FileUploadStatus($mailData));
+
+            return response()->json([
+                'msg' => 'File upload status',
+                'data' => $response->json()
+            ], $response->status());
+        } else {
+            return response()->json([
+                'msg' => 'Something went wrong!'
+            ], $response->status());
         }
-
-        Mail::to('vrj022@gmail.com', 'Vivek Joshi')
-            ->queue(new FileUploadStatus($mailData));
-
-        return response()->json([
-            'msg' => 'File upload status',
-            'data' => $response->json()
-        ], $response->status());
     }
 
     private function uploadFilesToApi($filePaths, $request, &$result, &$status): void
