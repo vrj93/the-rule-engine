@@ -3,12 +3,13 @@
 namespace App\Http\Controllers;
 
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
 class AuthController extends Controller
 {
-    public function login(Request $request) {
+    public function login(Request $request): JsonResponse {
         $request->validate([
             'username' => ['required'],
             'password' => ['required'],
@@ -21,8 +22,8 @@ class AuthController extends Controller
 
         try {
             $response = Http::asForm()->post($url, [
-                '_username' => $request->username,
-                '_password' => $request->password,
+                '_username' => $request->input('username'),
+                '_password' => $request->input('password'),
             ]);
         } catch (Exception $ex) {
             return response()->json(['msg' => $ex->getMessage()], 500);

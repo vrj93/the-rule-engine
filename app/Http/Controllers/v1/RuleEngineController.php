@@ -5,6 +5,7 @@ namespace App\Http\Controllers\v1;
 use App\Http\Controllers\Controller;
 use App\Mail\FileUploadStatus;
 use Exception;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Mail;
@@ -12,11 +13,11 @@ use Spatie\SlackAlerts\Facades\SlackAlert;
 
 class RuleEngineController extends Controller
 {
-    public $rules = [
+    public array $rules = [
         'vulnerabilities' => 4,
     ];
 
-    public function fileUpload(Request $request) {
+    public function fileUpload(Request $request): JsonResponse {
         if (null === $request->header('Authorization'))
             return response()->json(['msg' => 'Unauthenticated'], 401);
 
@@ -44,7 +45,8 @@ class RuleEngineController extends Controller
         return response()->json($result, $status);
     }
 
-    public function scanFile(Request $request) {
+    public function scanFile(Request $request): JsonResponse
+    {
         if (null === $request->header('Authorization'))
             return response()->json(['msg' => 'Unauthenticated'], 401);
 
@@ -59,7 +61,7 @@ class RuleEngineController extends Controller
 
         try {
             $response = Http::withToken($token)
-                ->post($url, ['ciUploadId' => $request->ciUploadId]);
+                ->post($url, ['ciUploadId' => $request->input('ciUploadId')]);
         } catch (Exception $ex) {
             return response()->json(['msg' => $ex->getMessage()], 500);
         }
@@ -70,7 +72,8 @@ class RuleEngineController extends Controller
         ], $response->status());
     }
 
-    public function uploadStatus(Request $request) {
+    public function uploadStatus(Request $request): JsonResponse
+    {
         if (null === $request->header('Authorization'))
             return response()->json(['msg' => 'Unauthenticated'], 401);
 
@@ -85,7 +88,7 @@ class RuleEngineController extends Controller
 
         try {
             $response = Http::withToken($token)
-                ->get($url, ['ciUploadId' => $request->ciUploadId]);
+                ->get($url, ['ciUploadId' => $request->input('ciUploadId')]);
         } catch (Exception $ex) {
             return response()->json(['msg' => $ex->getMessage()], 500);
         }
@@ -97,7 +100,7 @@ class RuleEngineController extends Controller
                 $mailData['vulnerabilities'] = $response['vulnerabilitiesFound'];
                 SlackAlert::message("Warning: {$response['vulnerabilitiesFound']} vulnerabilities found!");
             }
-            
+
             if ($response->successful()) {
                 $mailData['status'] = true;
             } else {
@@ -115,7 +118,7 @@ class RuleEngineController extends Controller
         ], $response->status());
     }
 
-    private function uploadFilesToApi($filePaths, $request, &$result, &$status)
+    private function uploadFilesToApi($filePaths, $request, &$result, &$status): void
     {
         $token = explode(' ', $request->header('Authorization'))[1];
         $url = env('API_URL').'/'.env('API_VERSION').'/open/uploads/dependencies/files';
@@ -125,7 +128,7 @@ class RuleEngineController extends Controller
             $response = Http::withToken($token);
             // Get the full path to the file
             $fullPath = storage_path('app/public/' . $filePath);
-            $reqData = [];
+
             if ($ciUploadID) {
                 $reqData = [
                     [
@@ -168,7 +171,8 @@ class RuleEngineController extends Controller
             try {
                 $response = $response->asMultipart()->post($url, $reqData);
             } catch (Exception $ex) {
-                return response()->json(['msg' => $ex->getMessage()], 500);
+                response()->json(['msg' => $ex->getMessage()], 500);
+                return;
             }
 
             $status = $response->status();
@@ -179,7 +183,7 @@ class RuleEngineController extends Controller
                 $result[] = ['file' => basename($fullPath), 'msg' => $response['message']];
             } else {
                 $result[] = ['msg' => $response['message']];
-                return false;
+                return;
             }
         }
     }
