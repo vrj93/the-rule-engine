@@ -41,6 +41,9 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Copy existing application directory contents
 COPY . /var/www
 
+# Create New User
+RUN useradd -ms /bin/bash vivek
+
 # Copy existing application directory permissions
 COPY --chown=vivek:vivek . /var/www
 
