@@ -129,21 +129,25 @@ class RuleEngineController extends Controller
             // Get the full path to the file
             $fullPath = storage_path('app/public/' . $filePath);
 
+            $formData = [
+                [
+                    'name' => 'fileData',
+                    'contents' => file_get_contents($fullPath),
+                    'filename' => basename($fullPath)
+                ],
+                [
+                    'name' => 'repositoryName',
+                    'contents' => $request->repository
+                ],
+                [
+                    'name' => 'commitName',
+                    'contents' => $request->commit
+                ]
+            ];
+
             if ($ciUploadID) {
                 $reqData = [
-                    [
-                        'name' => 'fileData',
-                        'contents' => file_get_contents($fullPath),
-                        'filename' => basename($fullPath)
-                    ],
-                    [
-                        'name' => 'repositoryName',
-                        'contents' => $request->repository
-                    ],
-                    [
-                        'name' => 'commitName',
-                        'contents' => $request->commit
-                    ],
+                    ...$formData,
                     [
                         'name' => 'ciUploadId',
                         'contents' => $ciUploadID
@@ -151,19 +155,7 @@ class RuleEngineController extends Controller
                 ];
             } else {
                 $reqData = [
-                    [
-                        'name' => 'fileData',
-                        'contents' => file_get_contents($fullPath),
-                        'filename' => basename($fullPath)
-                    ],
-                    [
-                        'name' => 'repositoryName',
-                        'contents' => $request->repository
-                    ],
-                    [
-                        'name' => 'commitName',
-                        'contents' => $request->commit
-                    ]
+                    ...$formData
                 ];
             }
 
