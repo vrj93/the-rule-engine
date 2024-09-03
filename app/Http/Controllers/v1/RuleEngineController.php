@@ -3,20 +3,14 @@
 namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
-use App\Mail\FileUploadStatus;
+use App\Jobs\FileScanStatusQueue;
 use Exception;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Mail;
-use Spatie\SlackAlerts\Facades\SlackAlert;
 
 class RuleEngineController extends Controller
 {
-    public array $rules = [
-        'vulnerabilities' => 4,
-    ];
-
     public function fileUpload(Request $request): JsonResponse {
         if (null === $request->header('Authorization'))
             return response()->json(['msg' => 'Unauthenticated'], 401);
@@ -62,6 +56,11 @@ class RuleEngineController extends Controller
         try {
             $response = Http::withToken($token)
                 ->post($url, ['ciUploadId' => $request->input('ciUploadId')]);
+
+            FileScanStatusQueue::dispatch([
+                'token' => $token,
+                'ciUploadId' => $request->input('ciUploadId')
+            ]);
         } catch (Exception $ex) {
             return response()->json(['msg' => $ex->getMessage()], 500);
         }
@@ -70,50 +69,6 @@ class RuleEngineController extends Controller
             'msg' => 'Scanned successfully',
             'data' => $response->json()
         ], $response->status());
-    }
-
-    public function uploadStatus(Request $request): JsonResponse
-    {
-        if (null === $request->header('Authorization'))
-            return response()->json(['msg' => 'Unauthenticated'], 401);
-
-        $token =  explode(' ', $request->header('Authorization'))[1];
-        $url = env('API_URL').'/'.env('API_VERSION').'/open/ci/upload/status';
-
-        $request->validate([
-            'ciUploadId' => ['required']
-        ], [
-            'ciUploadId.required' => ['The field ciUploadId is required.']
-        ]);
-
-        try {
-            $response = Http::withToken($token)
-                ->get($url, ['ciUploadId' => $request->input('ciUploadId')]);
-        } catch (Exception $ex) {
-            return response()->json(['msg' => $ex->getMessage()], 500);
-        }
-
-        if ($response->successful()) {
-            $mailData['progress'] = $response['progress'];
-            if ($response['vulnerabilitiesFound'] > $this->rules['vulnerabilities']) {
-                $mailData['vulnerabilities'] = $response['vulnerabilitiesFound'];
-                SlackAlert::message("Warning: {$response['vulnerabilitiesFound']} vulnerabilities found!");
-            }
-
-            $mailData['detailsUrl'] = $response['detailsUrl'];
-
-            Mail::to('vrj022@gmail.com', 'Vivek Joshi')
-                ->queue(new FileUploadStatus($mailData));
-
-            return response()->json([
-                'msg' => 'File upload status',
-                'data' => $response->json()
-            ], $response->status());
-        } else {
-            return response()->json([
-                'msg' => 'Something went wrong!'
-            ], $response->status());
-        }
     }
 
     private function uploadFilesToApi($filePaths, $request, &$result, &$status): void

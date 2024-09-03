@@ -56,6 +56,23 @@ services:
     networks:
       - rule-engine-net
 
+  rabbitmq:
+    image: "rabbitmq:3.13-management"
+    hostname: "rabbit"
+    ports:
+      - "15672:15672"
+      - "5672:5672"
+    environment:
+      - "RABBITMQ_DEFAULT_PASS=${RABBITMQ_PASSWORD}"
+      - "RABBITMQ_DEFAULT_USER=${RABBITMQ_USER}"
+      - "RABBITMQ_DEFAULT_VHOST=${RABBITMQ_VHOST}"
+    labels:
+      NAME: "rabbitmq"
+    volumes:
+      - ./rabbitmq-isolated.conf:/etc/rabbitmq/rabbitmq.config
+    networks:
+        - rule-engine-net
+
 networks:
   rule-engine-net:
     driver: bridge

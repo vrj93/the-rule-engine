@@ -1,5 +1,8 @@
 <?php
 
+use App\Jobs\FileScanStatusQueue;
+use PhpAmqpLib\Connection\AMQPStreamConnection;
+
 return [
 
     /*
@@ -72,6 +75,35 @@ return [
             'after_commit' => false,
         ],
 
+        'rabbitmq' => [
+            'driver' => 'rabbitmq',
+            'queue' => env('RABBITMQ_QUEUE', 'default'),
+            'connection' => AMQPStreamConnection::class,
+            'hosts' => [
+                [
+                    'host' => env('RABBITMQ_HOST', '127.0.0.1'),
+                    'port' => env('RABBITMQ_PORT', 5672),
+                    'user' => env('RABBITMQ_USER', 'guest'),
+                    'password' => env('RABBITMQ_PASSWORD', 'guest'),
+                    'vhost' => env('RABBITMQ_VHOST', '/'),
+                ],
+            ],
+            'options' => [
+                'queue' => [
+                    'declare' => true,
+                    'durable' => true,
+                    'exclusive' => false,
+                    'auto_delete' => false,
+                ],
+                'exchange' => [
+                    'type' => 'direct',
+                    'declare' => true,
+                    'durable' => true,
+                ],
+                'heartbeat' => 10,
+                'job' => FileScanStatusQueue::class
+            ],
+        ]
     ],
 
     /*
