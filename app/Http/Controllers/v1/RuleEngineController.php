@@ -23,7 +23,8 @@ class RuleEngineController extends Controller
         $this->ruleEngineService = $ruleEngineService;
     }
 
-    public function fileUpload(Request $request): JsonResponse {
+    public function fileUpload(Request $request): JsonResponse
+    {
         $request->validate([
             'files.*' => ['required', 'file']
         ], [

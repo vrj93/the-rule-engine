@@ -33,62 +33,22 @@ class RuleEngineService
 
     private function uploadFilesToApi ($filePaths, $reqObj): array
     {
+        $ciUploadID = '';
+        $response = [];
+        $result = [];
         $url = env('API_URL').'/'.env('API_VERSION').'/open/uploads/dependencies/files';
 
-        $ciUploadID = '';
-        $result = [];
-
         foreach ($filePaths as $filePath) {
-            $response = Http::withToken($reqObj['token']);
-            // Get the full path to the file
-            $fullPath = storage_path('app/public/' . $filePath);
-
-            $formData = [
-                [
-                    'name' => 'fileData',
-                    'contents' => file_get_contents($fullPath),
-                    'filename' => basename($fullPath)
-                ],
-                [
-                    'name' => 'repositoryName',
-                    'contents' => $reqObj['repository'],
-                ],
-                [
-                    'name' => 'commitName',
-                    'contents' => $reqObj['commit'],
-                ]
-            ];
-
-            if ($ciUploadID) {
-                $reqData = [
-                    ...$formData,
-                    [
-                        'name' => 'ciUploadId',
-                        'contents' => $ciUploadID
-                    ],
-                ];
-            } else {
-                $reqData = [
-                    ...$formData
-                ];
-            }
+            $reqData = $this->prepareReqData($filePath, $reqObj, $ciUploadID);
 
             // Upload the file to the external API
             try {
-                $response = $response->asMultipart()->post($url, $reqData);
+                $response = Http::withToken($reqObj['token'])->asMultipart()->post($url, $reqData);
             } catch (Exception $ex) {
                 Log::error($ex->getMessage());
             }
 
-            $status = $response->status();
-            if ($status == 200) {
-                $ciUploadID = $response['ciUploadId'];
-                $result[] = ['file' => basename($fullPath), 'data' => $response->json()];
-            } else if ($status == 400) {
-                $result[] = ['file' => basename($fullPath), 'msg' => $response['message']];
-            } else {
-                $result[] = ['msg' => $response['message']];
-            }
+            $result[] = $this->handleFileUploadResponse($filePath, $response, $ciUploadID);
         }
 
         return $result;
@@ -124,6 +84,58 @@ class RuleEngineService
                 'token' => $reqObj['token'],
                 'ciUploadId' => $ciUploadId,
             ]);
+        }
+
+        return $result;
+    }
+
+    private function prepareReqData ($filePath, $reqObj, $ciUploadID): array
+    {
+        $fullPath = storage_path('app/public/' . $filePath);
+
+        $formData = [
+            [
+                'name' => 'fileData',
+                'contents' => file_get_contents($fullPath),
+                'filename' => basename($fullPath)
+            ],
+            [
+                'name' => 'repositoryName',
+                'contents' => $reqObj['repository'],
+            ],
+            [
+                'name' => 'commitName',
+                'contents' => $reqObj['commit'],
+            ]
+        ];
+
+        if ($ciUploadID) {
+            $reqData = [
+                ...$formData,
+                [
+                    'name' => 'ciUploadId',
+                    'contents' => $ciUploadID
+                ],
+            ];
+        } else {
+            $reqData = [
+                ...$formData
+            ];
+        }
+
+        return $reqData;
+    }
+
+    private function handleFileUploadResponse ($fullPath, $response, &$ciUploadID): array
+    {
+        $status = $response->status();
+        if ($status == 200) {
+            $ciUploadID = $response['ciUploadId'];
+            $result = ['file' => basename($fullPath), 'data' => $response->json()];
+        } else if ($status == 400) {
+            $result = ['file' => basename($fullPath), 'msg' => $response['message']];
+        } else {
+            $result = ['msg' => $response['message']];
         }
 
         return $result;
