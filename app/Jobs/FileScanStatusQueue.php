@@ -18,7 +18,7 @@ class FileScanStatusQueue implements ShouldQueue
     public int $tries = 10;
     public int $timeout = 360;
     private array $data;
-    public array $rules = [
+    private array $rules = [
         'vulnerabilities' => 4,
     ];
 
@@ -66,6 +66,6 @@ class FileScanStatusQueue implements ShouldQueue
 
     public function failed(Exception $ex): void
     {
-        Log::info($ex->getMessage());
+        Log::error($ex->getMessage());
     }
 }
