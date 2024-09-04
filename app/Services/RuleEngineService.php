@@ -6,6 +6,7 @@ use App\Jobs\FileScanStatusQueue;
 use Exception;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
+use Spatie\SlackAlerts\Facades\SlackAlert;
 
 class RuleEngineService
 {
@@ -33,7 +34,7 @@ class RuleEngineService
 
     private function uploadFilesToApi ($filePaths, $reqObj): array
     {
-        $ciUploadID = '';
+        $ciUploadID = null;
         $response = [];
         $result = [];
         $url = env('API_URL').'/'.env('API_VERSION').'/open/uploads/dependencies/files';
@@ -46,6 +47,7 @@ class RuleEngineService
                 $response = Http::withToken($reqObj['token'])->asMultipart()->post($url, $reqData);
             } catch (Exception $ex) {
                 Log::error($ex->getMessage());
+                SlackAlert::message("Upload File Error: {$ex->getMessage()}");
             }
 
             $result[] = $this->handleFileUploadResponse($filePath, $response, $ciUploadID);
@@ -62,7 +64,7 @@ class RuleEngineService
             Http::withToken($token)
                 ->post($url, ['ciUploadId' => $ciUploadId]);
         } catch (Exception $ex) {
-            abort(500, $ex->getMessage());
+            SlackAlert::message("Scan File Error: {$ex->getMessage()}");
         }
     }
 
@@ -73,7 +75,13 @@ class RuleEngineService
 
         if (!empty($filePaths)) {
             $result = $this->uploadFilesToApi($filePaths, $reqObj);
-            if(!empty($result)) $ciUploadId = $result[0]['data']['ciUploadId'];
+
+            foreach ($result as $apiResponse) {
+                if(isset($apiResponse['data'])) {
+                    $ciUploadId = $apiResponse['data']['ciUploadId'];
+                    break;
+                }
+            }
         }
 
         if ($ciUploadId) {
