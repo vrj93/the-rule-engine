@@ -36,7 +36,7 @@ class FileScanStatusQueue implements ShouldQueue
     public function handle(): void
     {
         $response = [];
-        $url = env('API_URL').'/'.env('API_VERSION').'/open/ci/upload/status';
+        $url = env('API_FILE_UPLOAD_STATUS');
 
         try {
             $response = Http::withToken($this->data['token'])

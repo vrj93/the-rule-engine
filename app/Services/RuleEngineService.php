@@ -37,7 +37,7 @@ class RuleEngineService
         $ciUploadID = null;
         $response = [];
         $result = [];
-        $url = env('API_URL').'/'.env('API_VERSION').'/open/uploads/dependencies/files';
+        $url = env('API_FILE_UPLOAD');
 
         foreach ($filePaths as $filePath) {
             $reqData = $this->prepareReqData($filePath, $reqObj, $ciUploadID);
@@ -58,7 +58,7 @@ class RuleEngineService
 
     private function scanFile ($token, $ciUploadId): void
     {
-        $url = env('API_URL').'/'.env('API_VERSION').'/open/finishes/dependencies/files/uploads';
+        $url = env('API_FILE_SCAN');
 
         try {
             Http::withToken($token)

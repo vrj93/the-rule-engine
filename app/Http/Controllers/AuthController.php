@@ -18,7 +18,7 @@ class AuthController extends Controller
             'password.required' => 'The password field is required.',
         ]);
 
-        $url = env('API_URL').'/login_check';
+        $url = env('API_LOGIN');
 
         try {
             $response = Http::asForm()->post($url, [
