@@ -38,14 +38,13 @@ RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd zip socke
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Copy existing application directory contents (Prod only)
-#COPY . /var/www
-
 # Create New User
 RUN useradd -ms /bin/bash vivek
 
-# Set Ownership
+# Set Ownership and copy code (Prod only)
 #COPY --chown=vivek:vivek . /var/www
+
+# Set Ownership
 RUN chown -R vivek:vivek /var/www
 
 # Change current user
