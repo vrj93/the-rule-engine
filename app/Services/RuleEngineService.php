@@ -3,13 +3,20 @@
 namespace App\Services;
 
 use App\Jobs\FileScanStatusQueue;
+use App\Jobs\SlackAlertQueue;
+use App\Mail\FileUploadStatus;
+use App\Mail\TriggerEventMail;
 use Exception;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Log;
-use Spatie\SlackAlerts\Facades\SlackAlert;
+use Illuminate\Support\Facades\Mail;
 
 class RuleEngineService
 {
+    public static array $rules = [
+        'vulnerabilities' => 4,
+    ];
+
     public function fileUploadReqObj ($request): array
     {
         return [
@@ -47,7 +54,7 @@ class RuleEngineService
                 $response = Http::withToken($reqObj['token'])->asMultipart()->post($url, $reqData);
             } catch (Exception $ex) {
                 Log::error($ex->getMessage());
-                SlackAlert::message("Upload File Error: {$ex->getMessage()}");
+                SlackAlertQueue::dispatch(['msg' => "Upload File Error: {$ex->getMessage()}"]);
             }
 
             $result[] = $this->handleFileUploadResponse($filePath, $response, $ciUploadID);
@@ -64,7 +71,7 @@ class RuleEngineService
             Http::withToken($token)
                 ->post($url, ['ciUploadId' => $ciUploadId]);
         } catch (Exception $ex) {
-            SlackAlert::message("Scan File Error: {$ex->getMessage()}");
+            SlackAlertQueue::dispatch(['msg' => "Scan File Error: {$ex->getMessage()}"]);
         }
     }
 
@@ -147,5 +154,63 @@ class RuleEngineService
         }
 
         return $result;
+    }
+
+    public static function fileScanStatus (array $data): int
+    {
+        $response = [];
+        $url = env('API_FILE_UPLOAD_STATUS');
+
+        try {
+            $response = Http::withToken($data['token'])
+                ->get($url, ['ciUploadId' => $data['ciUploadId']]);
+        } catch (Exception $ex) {
+            Log::alert('msg: '. $ex->getMessage());
+        }
+
+        if ($response->successful()) {
+            $mailData['progress'] = $response['progress'];
+            Log::info('response', $response->json());
+            if ($response['vulnerabilitiesFound'] > self::$rules['vulnerabilities']) {
+                $mailData['vulnerabilities'] = $response['vulnerabilitiesFound'];
+                SlackAlertQueue::dispatch(['msg' => "Warning: {$response['vulnerabilitiesFound']} vulnerabilities found!"]);
+            }
+
+            $mailData['detailsUrl'] = $response['detailsUrl'] ?? '';
+
+            Mail::to('vrj022@gmail.com', 'Vivek Joshi')
+                ->queue(new FileUploadStatus($mailData));
+
+            //Rules
+            if (isset($response['automationRules'])) {
+                foreach ($response['automationRules'] as $rule) {
+                    if ($rule['triggered']) {
+                        self::triggerEvent($rule['ruleActions'], $rule['triggerEvents']);
+                    }
+                }
+            }
+
+            if ($response['progress'] < 100) {
+                SlackAlertQueue::dispatch(['msg' => 'Status: File scan in-progress...']);
+            } else {
+                SlackAlertQueue::dispatch(['msg' => 'Status: File scan completed!']);
+            }
+        }
+
+        return isset($response['progress']) ? $response['progress'] : -1;
+    }
+
+    private static function triggerEvent ($eventAction, $events): void
+    {
+        if (in_array('sendEmail', $eventAction)) {
+            Mail::to('vrj022@gmail.com', 'Vivek Joshi')
+                ->queue((new TriggerEventMail(['events' => $events]))->delay(10));
+        }
+
+        if (in_array('warnPipeline', $eventAction)) {
+            foreach ($events as $event) {
+                SlackAlertQueue::dispatch(['event' => $event]);
+            }
+        }
     }
 }
