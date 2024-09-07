@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\v1;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\FileUploadRequest;
 use App\Services\RuleEngineService;
 use Exception;
 use Illuminate\Http\JsonResponse;
@@ -23,16 +24,10 @@ class RuleEngineController extends Controller
         $this->ruleEngineService = $ruleEngineService;
     }
 
-    public function fileUpload(Request $request): JsonResponse
+    public function fileUpload(FileUploadRequest $request): JsonResponse
     {
-        $request->validate([
-            'files.*' => ['required', 'file']
-        ], [
-            'files.required' => 'The files field is required.'
-        ]);
-
-        $files = $request->file('files');
         $ruleEngine = $this->ruleEngineService;
+        $files = $request->file('files');
         $filePaths = $ruleEngine->fileStorage($files);
         $reqObj = $ruleEngine->fileUploadReqObj($request);
         $result = $ruleEngine->handleFileUploadProcess($reqObj, $filePaths);
