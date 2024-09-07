@@ -18,8 +18,9 @@ class FileUploadStatus extends Mailable implements ShouldQueue
     /**
      * Create a new message instance.
      */
-    public function __construct($data)
+    public function __construct(array $data)
     {
+        $this->onQueue('email');
         $this->data = $data;
     }
 
@@ -30,7 +31,7 @@ class FileUploadStatus extends Mailable implements ShouldQueue
     {
         return new Envelope(
             from: new Address(env('MAIL_FROM_ADDRESS'), env('MAIL_FROM_NAME')),
-            subject: 'File Upload Status',
+            subject: 'Rule Engine: File Upload Report',
         );
     }
 
