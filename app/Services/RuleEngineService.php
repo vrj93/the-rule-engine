@@ -13,6 +13,13 @@ use Illuminate\Support\Facades\Mail;
 
 class RuleEngineService
 {
+    public DatabaseService $dbService;
+
+    public function __construct(DatabaseService $databaseService)
+    {
+        $this->dbService = $databaseService;
+    }
+
     public static array $rules = [
         'vulnerabilities' => 4,
     ];
@@ -52,6 +59,7 @@ class RuleEngineService
             // Upload the file to the external API
             try {
                 $response = Http::withToken($reqObj['token'])->asMultipart()->post($url, $reqData);
+                $this->dbService->fileUpload(basename($filePath), $response);
             } catch (Exception $ex) {
                 Log::error($ex->getMessage());
                 SlackAlertQueue::dispatch(['msg' => "Upload File Error: {$ex->getMessage()}"]);
@@ -159,18 +167,19 @@ class RuleEngineService
     public static function fileScanStatus (array $data): int
     {
         $response = [];
-        $url = env('API_FILE_UPLOAD_STATUS');
+        $url = env('API_FILE_SCAN_STATUS');
 
         try {
             $response = Http::withToken($data['token'])
                 ->get($url, ['ciUploadId' => $data['ciUploadId']]);
+            (new DatabaseService())->fileScanStatus($data['ciUploadId'], $response);
         } catch (Exception $ex) {
             Log::alert('msg: '. $ex->getMessage());
         }
 
         if ($response->successful()) {
             $mailData['progress'] = $response['progress'];
-            Log::info('response', $response->json());
+
             if ($response['vulnerabilitiesFound'] > self::$rules['vulnerabilities']) {
                 $mailData['vulnerabilities'] = $response['vulnerabilitiesFound'];
                 SlackAlertQueue::dispatch(['msg' => "Warning: {$response['vulnerabilitiesFound']} vulnerabilities found!"]);
