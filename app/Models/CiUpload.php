@@ -11,6 +11,14 @@ class CiUpload extends Model
     use HasFactory;
 
     public $table = 'ci_uploads';
+    protected $fillable = [
+        'ciUploadId',
+        'uploadProgramsFileId',
+        'totalScans',
+        'remainingScans',
+        'percentage',
+        'estimatedDaysLeft'
+    ];
 
     public function fileUpload (): HasMany
     {

@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('ci_uploads', function (Blueprint $table) {
             $table->id();
-            $table->bigInteger('ciUploadId');
+            $table->bigInteger('ciUploadId')->unique();
             $table->bigInteger('uploadProgramsFileId');
             $table->integer('totalScans');
             $table->integer('remainingScans');
