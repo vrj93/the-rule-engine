@@ -10,6 +10,16 @@ class EventTrigger extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'dependency',
+        'dependencyLink',
+        'licenses',
+        'cve',
+        'cveLink',
+        'cvss2',
+        'cvss3',
+    ];
+
     public function ruleTrigger(): BelongsTo
     {
         return $this->belongsTo(RuleTrigger::class);

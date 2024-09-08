@@ -11,6 +11,11 @@ class RuleTrigger extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'ruleActions',
+        'ruleLink',
+    ];
+
     public function fileScan(): BelongsTo
     {
         return $this->belongsTo(FileScan::class);

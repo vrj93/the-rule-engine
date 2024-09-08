@@ -10,6 +10,10 @@ class FileUploads extends Model
 {
     use HasFactory;
 
+    protected $fillable = [
+        'name',
+    ];
+
     public function ciUploadStatus (): BelongsTo
     {
         return $this->belongsTo(CiUpload::class);

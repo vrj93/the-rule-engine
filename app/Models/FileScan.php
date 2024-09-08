@@ -11,7 +11,15 @@ class FileScan extends Model
 {
     use HasFactory;
 
-    public function ciUploadStatus (): BelongsTo
+    protected $fillable = [
+        'progress',
+        'vulnerabilitiesFound',
+        'unaffectedVulnerabilitiesFound',
+        'automationsAction',
+        'policyEngineAction',
+    ];
+
+    public function ciUpload (): BelongsTo
     {
         return $this->belongsTo(CiUpload::class);
     }
