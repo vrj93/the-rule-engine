@@ -1,6 +1,6 @@
 # A Rule Engine
 
-Given APIs are for the purpose of Login(Token generation), File Uploads, File Scans and Upload Status. https://debricked.com/api open source APIs are consumed to do the operation such as scanning and finding different level of vulnerabilities in the Application Config files.
+Following is an Event Driven Application. Being Static Code Analyser it has purpose to notify through Emails or Slack channel. These alerts are regarding identified vulnerabilities in the config files of End User Application. Given APIs are for the purpose of Token generation, File Uploads, File Scans and Scan Status. https://debricked.com/api open source APIs are consumed to do the operation.
 
 ## Table of Contents
 
@@ -69,6 +69,7 @@ This application uses email and Slack notifications for specific alerts:
 
 - **Framework**: Laravel 11
 - **Language**: PHP 8.2
-- **Database**: MySQL 8
+- **Database**: MySQL 8.0
+- **Queue Management**: RabbitMQ 3.13.7
 - **Containerization**: Docker, Docker Compose
 - **Notifications**: Email (via SMTP), Slack Webhook
