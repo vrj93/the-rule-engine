@@ -43,6 +43,11 @@ Your application should now be running and accessible at `http://localhost:8080`
 - **Rebuild containers:** `docker-compose up -d --build`
 - **Run Artisan commands:** `docker-compose exec app php artisan [command]`
 
+### RabbitMQ: Create Queue
+
+- **Command:** `docker exec -it rule_engine_app php artisan rabbitmq:queue-declare <queue name>`
+- **Name** `default, email, slack`
+
 ## Configuration
 
 ### Environment Variables
