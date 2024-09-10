@@ -39,16 +39,16 @@ RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd zip socke
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
 # Create New User
-RUN useradd -ms /bin/bash vivek
+RUN useradd -ms /bin/bash ubuntu
 
 # Set Ownership and copy code (Prod only)
 #COPY --chown=vivek:vivek . /var/www
 
 # Set Ownership
-RUN chown -R vivek:vivek /var/www
+RUN chown -R ubuntu: /var/www
 
 # Change current user
-USER vivek
+USER ubuntu
 
 # Expose port 80 and start php-fpm server
 EXPOSE 80
