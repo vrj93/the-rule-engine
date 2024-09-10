@@ -4,7 +4,7 @@
 FROM php:8.2-fpm
 
 # Set working directory
-WORKDIR /var/www
+WORKDIR /var/www/rule-engine
 
 # Install system dependencies
 RUN apt-get update && apt-get install -y \
@@ -42,10 +42,10 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN useradd -ms /bin/bash ubuntu
 
 # Set Ownership and copy code (Prod only)
-#COPY --chown=vivek:vivek . /var/www
+COPY --chown=ubuntu: . /var/www/rule-engine
 
 # Set Ownership
-RUN chown -R ubuntu: /var/www
+#RUN chown -R ubuntu: /var/www
 
 # Change current user
 USER ubuntu

@@ -3,7 +3,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: Dockerfile
+      dockerfile: vivek022/the-rule-engine:latest
     container_name: rule_engine_app
     restart: unless-stopped
     working_dir: /var/www
