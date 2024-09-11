@@ -8,8 +8,8 @@ services:
     env_file:
       - .env.prod
     environment:
-      APP_KEY: $${APP_KEY}
-      SLACK_ALERT_WEBHOOK: $${SLACK_ALERT_WEBHOOK}
+      - "APP_KEY=${APP_KEY}"
+      - "SLACK_ALERT_WEBHOOK=${SLACK_ALERT_WEBHOOK}"
     restart: unless-stopped
     working_dir: /var/www
     volumes:
@@ -42,10 +42,10 @@ services:
     ports:
       - "3306:3306"
     environment:
-      DB_DATABASE: $${MYSQL_DATABASE}
-      DB_USER: $${MYSQL_USER}
-      DB_PASSWORD: $${MYSQL_PASSWORD}
-      DB_ROOT_PASSWORD: $${MYSQL_ROOT_PASSWORD}
+      - "DB_DATABASE=${MYSQL_DATABASE}"
+      - "DB_USER=${MYSQL_USER}"
+      - "DB_PASSWORD=${MYSQL_PASSWORD}"
+      - "DB_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}"
     volumes:
       - engineData:/var/lib/mysql
     networks:
@@ -68,8 +68,8 @@ services:
       - "15672:15672"
       - "5672:5672"
     environment:
-      RABBITMQ_PASSWORD: $${RABBITMQ_DEFAULT_PASS}
-      RABBITMQ_USER: $${RABBITMQ_DEFAULT_USER}
+      - "RABBITMQ_PASSWORD=${RABBITMQ_DEFAULT_PASS}"
+      - "RABBITMQ_USER=${RABBITMQ_DEFAULT_USER}"
     labels:
       NAME: "rabbitmq"
     volumes:
