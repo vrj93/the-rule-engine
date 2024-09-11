@@ -8,8 +8,8 @@ services:
     env_file:
       - .env.prod
     environment:
-      APP_KEY: ${APP_KEY}
-      SLACK_ALERT_WEBHOOK: ${SLACK_ALERT_WEBHOOK}
+      - APP_KEY=${APP_KEY}
+      - SLACK_ALERT_WEBHOOK=${SLACK_ALERT_WEBHOOK}
     restart: unless-stopped
     working_dir: /var/www/rule-engine
     volumes:
@@ -44,12 +44,12 @@ services:
     env_file:
       - .env.prod
     environment:
-      DB_CONNECTION: ${MYSQL_CONNECTION}
-      DB_HOST: ${MYSQL_HOST}
-      DB_DATABASE: ${MYSQL_DATABASE}
-      DB_USERNAME: ${MYSQL_USER}
-      DB_PASSWORD: ${MYSQL_PASSWORD}
-      DB_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
+      - DB_CONNECTION=${MYSQL_CONNECTION}
+      - DB_HOST=${MYSQL_HOST}
+      - DB_DATABASE=${MYSQL_DATABASE}
+      - DB_USERNAME=${MYSQL_USER}
+      - DB_PASSWORD=${MYSQL_PASSWORD}
+      - DB_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}
     volumes:
       - engineData:/var/lib/mysql
     networks:
@@ -76,8 +76,8 @@ services:
     env_file:
       - .env.prod
     environment:
-      RABBITMQ_USER: ${RABBITMQ_DEFAULT_USER}
-      RABBITMQ_PASSWORD: ${RABBITMQ_DEFAULT_PASS}
+      - RABBITMQ_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_PASSWORD=${RABBITMQ_DEFAULT_PASS}
     labels:
       NAME: "rabbitmq"
     volumes:
