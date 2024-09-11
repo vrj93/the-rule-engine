@@ -7,6 +7,9 @@ services:
     container_name: rule_engine_app
     env_file:
       - .env.prod
+    environment:
+      APP_KEY: ${APP_KEY}
+      SLACK_ALERT_WEBHOOK: ${SLACK_ALERT_WEBHOOK}
     restart: unless-stopped
     working_dir: /var/www
     volumes:
