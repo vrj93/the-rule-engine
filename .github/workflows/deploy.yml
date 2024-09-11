@@ -39,9 +39,9 @@ jobs:
           script: |
             cd /var/www/the-rule-engine
             docker pull vivek022/the-rule-engine:latest
-            docker compose down
-            docker compose up -d --build
-            docker compose exec app php artisan migrate --force
+            docker-compose down
+            docker-compose up -d --build
+            docker-compose exec app php artisan migrate --force
         env:
           APP_KEY: ${{ secrets.APP_KEY }}
           MYSQL_CONNECTION: ${{ secrets.DB_CONNECTION }}
