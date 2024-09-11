@@ -42,3 +42,10 @@ jobs:
             docker compose down
             docker compose up -d --build
             docker compose exec app php artisan migrate --force
+        env:
+          MYSQL_DATABASE: ${{ secrets.DB_DATABASE }}
+          MYSQL_USER: ${{ secrets.DB_USERNAME }}
+          MYSQL_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
+          RABBITMQ_DEFAULT_PASS: ${{ secrets.RABBITMQ_PASSWORD }}
+          RABBITMQ_DEFAULT_USER: ${{ secrets.RABBITMQ_USER }}
