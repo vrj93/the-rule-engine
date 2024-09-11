@@ -32,6 +32,17 @@ jobs:
     steps:
       - name: SSH into Production Server and Deploy
         uses: appleboy/ssh-action@v1.0.3
+        env:
+          APP_KEY: ${{ secrets.APP_KEY }}
+          MYSQL_CONNECTION: ${{ secrets.DB_CONNECTION }}
+          MYSQL_HOST: ${{ secrets.DB_HOST }}
+          MYSQL_DATABASE: ${{ secrets.DB_DATABASE }}
+          MYSQL_USER: ${{ secrets.DB_USERNAME }}
+          MYSQL_PASSWORD: ${{ secrets.DB_PASSWORD }}
+          MYSQL_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
+          RABBITMQ_DEFAULT_USER: ${{ secrets.RABBITMQ_USER }}
+          RABBITMQ_DEFAULT_PASS: ${{ secrets.RABBITMQ_PASSWORD }}
+          SLACK_ALERT_WEBHOOK: ${{ secrets.SLACK_ALERT_WEBHOOK }}
         with:
           host: ${{ secrets.PRODUCTION_SERVER }}
           key: ${{ secrets.SSH_KEY }}
@@ -42,14 +53,3 @@ jobs:
             docker-compose down
             docker-compose up -d
             docker-compose exec app php artisan migrate --force
-        env:
-          "APP_KEY=${{ secrets.APP_KEY }}"
-          "MYSQL_CONNECTION=${{ secrets.DB_CONNECTION }}"
-          "MYSQL_HOST=${{ secrets.DB_HOST }}"
-          "MYSQL_DATABASE=${{ secrets.DB_DATABASE }}"
-          "MYSQL_USER=${{ secrets.DB_USERNAME }}"
-          "MYSQL_PASSWORD=${{ secrets.DB_PASSWORD }}"
-          "MYSQL_ROOT_PASSWORD=${{ secrets.DB_ROOT_PASSWORD }}"
-          "RABBITMQ_DEFAULT_USER=${{ secrets.RABBITMQ_USER }}"
-          "RABBITMQ_DEFAULT_PASS=${{ secrets.RABBITMQ_PASSWORD }}"
-          "SLACK_ALERT_WEBHOOK=${{ secrets.SLACK_ALERT_WEBHOOK }}"
