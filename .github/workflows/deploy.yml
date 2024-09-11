@@ -38,7 +38,6 @@ jobs:
           username: ubuntu
           script: |
             cd /var/www/the-rule-engine
-            pwd
             docker pull vivek022/the-rule-engine:latest
             docker-compose down
             docker-compose up -d --build
