@@ -37,7 +37,7 @@ jobs:
           username: ubuntu
           key: ${{ secrets.SSH_KEY }}
           script: |
-            cd /var/www/rule-engine
+            cd /home/ubuntu
             docker pull vivek022/the-rule-engine:latest
             docker compose down
             docker compose up -d --build
