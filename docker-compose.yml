@@ -8,8 +8,8 @@ services:
     env_file:
       - .env.prod
     environment:
-      - "APP_KEY=$${APP_KEY}"
-      - "SLACK_ALERT_WEBHOOK=$${SLACK_ALERT_WEBHOOK}"
+      APP_KEY: ${APP_KEY}
+      SLACK_ALERT_WEBHOOK: ${SLACK_ALERT_WEBHOOK}
     restart: unless-stopped
     working_dir: /var/www
     volumes:
@@ -41,11 +41,15 @@ services:
     restart: unless-stopped
     ports:
       - "3306:3306"
+    env_file:
+      - .env.prod
     environment:
-      - "DB_DATABASE=$${MYSQL_DATABASE}"
-      - "DB_USERNAME=$${MYSQL_USER}"
-      - "DB_PASSWORD=$${MYSQL_PASSWORD}"
-      - "DB_ROOT_PASSWORD=$${MYSQL_ROOT_PASSWORD}"
+      DB_CONNECTION: ${MYSQL_CONNECTION}
+      DB_HOST: ${MYSQL_HOST}
+      DB_DATABASE: ${MYSQL_DATABASE}
+      DB_USERNAME: ${MYSQL_USER}
+      DB_PASSWORD: ${MYSQL_PASSWORD}
+      DB_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
     volumes:
       - engineData:/var/lib/mysql
     networks:
@@ -55,6 +59,8 @@ services:
   mailhog:
     image: mailhog/mailhog
     container_name: rule_engine_mailhog
+    env_file:
+      - .env.prod
     ports:
       - "${MAIL_PORT}:8025"
     restart: unless-stopped
@@ -67,15 +73,17 @@ services:
     ports:
       - "15672:15672"
       - "5672:5672"
+    env_file:
+      - .env.prod
     environment:
-      - "RABBITMQ_PASSWORD=$${RABBITMQ_DEFAULT_PASS}"
-      - "RABBITMQ_USER=$${RABBITMQ_DEFAULT_USER}"
+      RABBITMQ_USER: ${RABBITMQ_DEFAULT_USER}
+      RABBITMQ_PASSWORD: ${RABBITMQ_DEFAULT_PASS}
     labels:
       NAME: "rabbitmq"
     volumes:
       - ./rabbitmq-isolated.conf:/etc/rabbitmq/rabbitmq.config
     networks:
-        - rule-engine-net
+      - rule-engine-net
 
 networks:
   rule-engine-net:
