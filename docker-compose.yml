@@ -43,7 +43,7 @@ services:
       - "3306:3306"
     environment:
       - "DB_DATABASE=${MYSQL_DATABASE}"
-      - "DB_USER=${MYSQL_USER}"
+      - "DB_USERNAME=${MYSQL_USER}"
       - "DB_PASSWORD=${MYSQL_PASSWORD}"
       - "DB_ROOT_PASSWORD=${MYSQL_ROOT_PASSWORD}"
     volumes:
