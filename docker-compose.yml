@@ -5,7 +5,7 @@ services:
   app:
     build:
       context: .
-      dockerfile: vivek022/the-rule-engine:latest
+      dockerfile: Dockerfile
     container_name: rule_engine_app
     env_file:
       - prod.env
