@@ -3,9 +3,7 @@ version: '3'
 services:
   # Application container
   app:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: vivek022/the-rule-engine:latest
     container_name: rule_engine_app
     env_file:
       - prod.env
