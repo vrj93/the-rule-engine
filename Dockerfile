@@ -44,6 +44,9 @@ RUN useradd -ms /bin/bash ubuntu
 # Set Ownership and copy code (Prod only)
 COPY --chown=ubuntu: . /var/www/rule-engine
 
+# Install PHP dependencies using Composer
+RUN composer install --no-dev --optimize-autoloader
+
 # Set Ownership
 #RUN chown -R ubuntu: /var/www
 
