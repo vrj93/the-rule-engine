@@ -47,8 +47,9 @@ jobs:
             export RABBITMQ_DEFAULT_USER=${{ secrets.RABBITMQ_USER }}
             export RABBITMQ_DEFAULT_PASS=${{ secrets.RABBITMQ_PASSWORD }}
             export SLACK_ALERT_WEBHOOK=${{ secrets.SLACK_ALERT_WEBHOOK }}
-            docker pull vivek022/the-rule-engine:latest
             cd ~/the-rule-engine
+            docker pull vivek022/the-rule-engine:latest
+            git pull
             docker-compose down
             docker-compose up -d
             docker-compose exec app php artisan migrate --force
