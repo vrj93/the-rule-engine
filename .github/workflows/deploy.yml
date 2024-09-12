@@ -32,23 +32,21 @@ jobs:
     steps:
       - name: SSH into Production Server and Deploy
         uses: appleboy/ssh-action@v1.0.3
-        env:
-          APP_KEY: ${{ secrets.APP_KEY }}
-          MYSQL_CONNECTION: ${{ secrets.DB_CONNECTION }}
-          MYSQL_HOST: ${{ secrets.DB_HOST }}
-          MYSQL_DATABASE: ${{ secrets.DB_DATABASE }}
-          MYSQL_USER: ${{ secrets.DB_USERNAME }}
-          MYSQL_PASSWORD: ${{ secrets.DB_PASSWORD }}
-          MYSQL_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
-          RABBITMQ_DEFAULT_USER: ${{ secrets.RABBITMQ_USER }}
-          RABBITMQ_DEFAULT_PASS: ${{ secrets.RABBITMQ_PASSWORD }}
-          SLACK_ALERT_WEBHOOK: ${{ secrets.SLACK_ALERT_WEBHOOK }}
         with:
           host: ${{ secrets.PRODUCTION_SERVER }}
           key: ${{ secrets.SSH_KEY }}
           username: ubuntu
-          envs: APP_KEY,MYSQL_CONNECTION,MYSQL_HOST,MYSQL_DATABASE,MYSQL_USER,MYSQL_PASSWORD,MYSQL_ROOT_PASSWORD,RABBITMQ_DEFAULT_USER,RABBITMQ_DEFAULT_PASS,SLACK_ALERT_WEBHOOK
-          script:
+          script: |
+            export APP_KEY=${{ secrets.APP_KEY }}
+            export MYSQL_CONNECTION=${{ secrets.DB_CONNECTION }}
+            export MYSQL_HOST=${{ secrets.DB_HOST }}
+            export MYSQL_DATABASE=${{ secrets.DB_DATABASE }}
+            export MYSQL_USER=${{ secrets.DB_USERNAME }}
+            export MYSQL_PASSWORD=${{ secrets.DB_PASSWORD }}
+            export MYSQL_ROOT_PASSWORD=${{ secrets.DB_ROOT_PASSWORD }}
+            export RABBITMQ_DEFAULT_USER=${{ secrets.RABBITMQ_USER }}
+            export RABBITMQ_DEFAULT_PASS=${{ secrets.RABBITMQ_PASSWORD }}
+            export SLACK_ALERT_WEBHOOK=${{ secrets.SLACK_ALERT_WEBHOOK }}
             cd ~/the-rule-engine
             docker pull vivek022/the-rule-engine:latest
             docker-compose down
