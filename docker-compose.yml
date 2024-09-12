@@ -8,10 +8,10 @@ services:
       dockerfile: vivek022/the-rule-engine:latest
     container_name: rule_engine_app
     env_file:
-      - ./prod.env
+      - prod.env
     environment:
-      - "APP_KEY=${APP_KEY}"
-      - "SLACK_ALERT_WEBHOOK=${SLACK_ALERT_WEBHOOK}"
+      - APP_KEY=${APP_KEY}
+      - SLACK_ALERT_WEBHOOK=${SLACK_ALERT_WEBHOOK}
     restart: unless-stopped
     working_dir: /var/www/rule-engine
     volumes:
@@ -44,7 +44,7 @@ services:
     ports:
       - "3306:3306"
     env_file:
-      - ./prod.env
+      - prod.env
     environment:
       - DB_CONNECTION=${MYSQL_CONNECTION}
       - DB_HOST=${MYSQL_HOST}
@@ -62,7 +62,7 @@ services:
     image: mailhog/mailhog
     container_name: rule_engine_mailhog
     env_file:
-      - ./prod.env
+      - prod.env
     ports:
       - "${MAIL_PORT}:8025"
     restart: unless-stopped
@@ -76,7 +76,7 @@ services:
       - "15672:15672"
       - "5672:5672"
     env_file:
-      - ./prod.env
+      - prod.env
     environment:
       - RABBITMQ_USER=${RABBITMQ_DEFAULT_USER}
       - RABBITMQ_PASSWORD=${RABBITMQ_DEFAULT_PASS}
