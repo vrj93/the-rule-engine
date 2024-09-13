@@ -54,4 +54,4 @@ jobs:
             docker pull vivek022/the-rule-engine:latest
             docker-compose down
             docker-compose up -d
-            docker-compose exec app php artisan migrate --force
+            docker-compose exec rule_engine_app php artisan migrate --force
