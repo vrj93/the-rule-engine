@@ -10,6 +10,11 @@ services:
     working_dir: /var/www/rule-engine
     volumes:
       - .:/var/www/rule-engine
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 400M
     networks:
       - rule-engine-net
     depends_on:
