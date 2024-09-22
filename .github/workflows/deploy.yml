@@ -36,7 +36,7 @@ jobs:
           APP_KEY: ${{ secrets.APP_KEY }}
           MYSQL_CONNECTION: ${{ secrets.DB_CONNECTION }}
           MYSQL_HOST: ${{ secrets.DB_HOST }}
-          MYSQL_DATABASE: ${{ secrets.DB_DATABASE }}
+          DB_DATABASE: ${{ secrets.DB_DATABASE }}
           MYSQL_USER: ${{ secrets.DB_USERNAME }}
           MYSQL_PASSWORD: ${{ secrets.DB_PASSWORD }}
           MYSQL_ROOT_PASSWORD: ${{ secrets.DB_ROOT_PASSWORD }}
@@ -47,7 +47,7 @@ jobs:
           host: ${{ secrets.PRODUCTION_SERVER }}
           key: ${{ secrets.SSH_KEY }}
           username: ubuntu
-          envs: APP_KEY,MYSQL_CONNECTION,MYSQL_HOST,MYSQL_DATABASE,MYSQL_USER,MYSQL_PASSWORD,MYSQL_ROOT_PASSWORD,RABBITMQ_DEFAULT_USER,RABBITMQ_DEFAULT_PASS,SLACK_ALERT_WEBHOOK
+          envs: APP_KEY,MYSQL_CONNECTION,MYSQL_HOST,DB_DATABASE,MYSQL_USER,MYSQL_PASSWORD,MYSQL_ROOT_PASSWORD,RABBITMQ_DEFAULT_USER,RABBITMQ_DEFAULT_PASS,SLACK_ALERT_WEBHOOK
           script: |
             cd ~/the-rule-engine
             git pull
