@@ -23,7 +23,7 @@ jobs:
 
       - name: Build and Push Docker Image
         run: |
-          docker build -t vivek022/the-rule-engine:latest .
+          docker build --platform linux/amd64 -t vivek022/the-rule-engine:latest .
           docker push vivek022/the-rule-engine:latest
 
   deploy:
