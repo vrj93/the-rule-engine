@@ -38,17 +38,17 @@ RUN docker-php-ext-install pdo pdo_mysql mbstring exif pcntl bcmath gd zip socke
 # Install Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
+# Install PHP dependencies using Composer
+RUN composer install --no-dev --optimize-autoloader
+
 # Create New User
 RUN useradd -ms /bin/bash ubuntu
 
 # Set Ownership and copy code (Prod only)
 COPY --chown=ubuntu: . /var/www/rule-engine
 
-# Install PHP dependencies using Composer
-RUN composer install --no-dev --optimize-autoloader
-
 # Set Ownership
-#RUN chown -R ubuntu: /var/www
+# RUN chown -R ubuntu: /var/www
 
 # Change current user
 USER ubuntu
