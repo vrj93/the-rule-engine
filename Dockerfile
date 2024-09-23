@@ -42,10 +42,10 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN useradd -ms /bin/bash ubuntu
 
 # Add user to 'sudo' group
-RUN usermod -aG sudo ubuntu
+RUN usermod -aG docker ubuntu
 
 # Set Ownership and copy code (Prod only)
-COPY --chown=ubuntu:ubuntu . /var/www/rule-engine
+COPY --chown=ubuntu:docker . /var/www/rule-engine
 
 # Change current user
 USER ubuntu
