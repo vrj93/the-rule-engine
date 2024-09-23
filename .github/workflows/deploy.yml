@@ -54,5 +54,5 @@ jobs:
             docker pull vivek022/the-rule-engine:latest
             docker-compose down
             docker-compose --env-file prod.env --compatibility up -d
-            docker-compose exec rule_engine_app composer install --no-dev --optimize-autoloader
-            docker-compose exec rule_engine_app php artisan migrate --force
+            docker exec rule_engine_app composer install --no-dev --optimize-autoloader
+            docker exec rule_engine_app php artisan migrate --force
