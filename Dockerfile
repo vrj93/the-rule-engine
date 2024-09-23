@@ -42,13 +42,15 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN useradd -ms /bin/bash ubuntu
 
 # Set Ownership and copy code (Prod only)
-COPY --chown=ubuntu:ubuntu . /var/www/rule-engine
-
-# Change current user
-USER ubuntu
+COPY . /var/www/rule-engine
 
 # Install PHP dependencies using Composer
 RUN composer install --no-dev --optimize-autoloader
+
+RUN chown -R ubuntu: /var/www/rule-engine
+
+# Change current user
+USER ubuntu
 
 # Set Ownership
 #RUN chown -R ubuntu: /var/www
