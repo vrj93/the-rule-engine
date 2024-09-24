@@ -12,6 +12,8 @@ services:
       - DB_DATABASE=${MYSQL_DATABASE}
       - DB_USERNAME=${MYSQL_USER}
       - DB_PASSWORD=${MYSQL_PASSWORD}
+      - RABBITMQ_USER=${RABBITMQ_DEFAULT_USER}
+      - RABBITMQ_PASSWORD=${RABBITMQ_DEFAULT_PASS}
       - SLACK_ALERT_WEBHOOK=${SLACK_ALERT_WEBHOOK}
     env_file:
       - prod.env
@@ -74,9 +76,6 @@ services:
     ports:
       - "15672:15672"
       - "5672:5672"
-    environment:
-      - RABBITMQ_DEFAULT_USER=${RABBITMQ_DEFAULT_USER}
-      - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
     labels:
       NAME: "rabbitmq"
     volumes:
