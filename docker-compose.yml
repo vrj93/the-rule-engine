@@ -8,6 +8,8 @@ services:
     environment:
       - APP_KEY=${APP_KEY}
       - SLACK_ALERT_WEBHOOK=${SLACK_ALERT_WEBHOOK}
+    env_file:
+      - prod.env
     restart: unless-stopped
     working_dir: /var/www/rule-engine
     volumes:
