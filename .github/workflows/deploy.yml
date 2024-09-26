@@ -3,7 +3,7 @@ name: Rule Engine CI/CD
 on:
   push:
     branches:
-      - deploy-ci-cd
+      - main
 
 jobs:
   build:
