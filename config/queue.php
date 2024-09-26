@@ -92,6 +92,7 @@ return [
                 'queue' => [
                     'declare' => true,
                     'durable' => true,
+                    'persistent' => true,
                     'exclusive' => false,
                     'auto_delete' => false,
                 ],

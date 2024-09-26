@@ -83,6 +83,7 @@ services:
       NAME: "rabbitmq"
     volumes:
       - ./rabbitmq-isolated.conf:/etc/rabbitmq/rabbitmq.config
+      - rabbitmq_data:/var/lib/rabbitmq
     networks:
       - rule-engine-net
 
@@ -92,4 +93,6 @@ networks:
 
 volumes:
   engineData:
+    driver: local
+  rabbitmq-data:
     driver: local
