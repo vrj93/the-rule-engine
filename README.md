@@ -70,11 +70,19 @@ This application uses email and Slack notifications for specific alerts:
 - **Mail Notifications**: Configured via the `MAIL_*` environment variables. Ensure these are set up correctly for your environment.
 - **Slack Notifications**: Set up via the `SLACK_WEBHOOK_URL` in your `.env` file. Alerts will be sent to the specified Slack channel for critical events.
 
+## CI/CD
+
+- Both integration and deployment are automated for the `main` branch.
+- GitHub Action workflow is used for the Ops.
+- Docker image build, SSH into production, Pulling the latest image from the hub and container building are handled through this workflow.
+- GitHub Action `repository secrets` are utilised for sensitive information.
+
 ## Technology Stack
 
-- **Framework**: Laravel 11
 - **Language**: PHP 8.2
+- **Framework**: Laravel 11
 - **Database**: MySQL 8.0
 - **Queue Management**: RabbitMQ 3.13.7
 - **Containerization**: Docker, Docker Compose
 - **Notifications**: Email (via SMTP), Slack Webhook
+- **CI/CD**: GitHub Action Workflow
