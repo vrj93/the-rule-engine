@@ -81,6 +81,11 @@ services:
       - RABBITMQ_DEFAULT_PASS=${RABBITMQ_DEFAULT_PASS}
     labels:
       NAME: "rabbitmq"
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 400M
     volumes:
       - ./rabbitmq-isolated.conf:/etc/rabbitmq/rabbitmq.config
     networks:
