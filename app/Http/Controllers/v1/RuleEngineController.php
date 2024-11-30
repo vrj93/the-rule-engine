@@ -18,7 +18,7 @@ class RuleEngineController extends Controller
      */
     public function __construct (Request $request, RuleEngineService $ruleEngineService)
     {
-        if (null === $request->header('Authorizationn'))
+        if (null === $request->header('Authorization'))
             throw new Exception('Unauthenticated', 401);
 
         $this->ruleEngineService = $ruleEngineService;
